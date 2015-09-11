@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.TreeMap;
@@ -306,155 +307,150 @@ public class LArests {
 	 */
 	public static void main(String[] args) {
 		LArests larests = new LArests();
-		System.out.println("Please enter Google Maps API KEY:");
-		larests.setAPIkey((new Scanner(System.in)).toString()); 
+		System.out.println("This program requires a Google Maps Geocoding API Key.\n");
+		System.out.println("To create a key, go to the following website. Follow the directions to GET A KEY.");
+		System.out.println("Website:  https://developers.google.com/maps/documentation/geocoding/get-api-key\n");
+		System.out.println("Please enter your API Key:");
+		Scanner sc = new Scanner(System.in);
+		larests.setAPIkey(sc.toString()); 
 		larests.read();
+		sc.close();
 		
 		System.out.println("For help and info, use the 'help' command. Otherwise,");
 		System.out.println("Please enter street address:");
-		String str = (new Scanner(System.in)).toString(); 
-		
-//		For default testing purposes:
-//		String str = "1463 Nogales St, Rowland Heights, CA 91748";
-		try {
-			larests.compareDist(larests.requestGoogle(str));
-			larests.printFormat();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 
-//		switch(args[0]) {
-//		case "help":
-//			System.out.println("Available commands:");
-//			System.out.println("===========================================");
-//			System.out.println("'...' represents address field");
-//			System.out.println("===========================================");
-//			System.out.println("Sort by distance: 		-d ...");
-//			System.out.println("Sort by health rating:  -r ...");
-//			System.out.println("Sort by health grade:   -g ...");
-//			System.out.println("Sort by name (ABC):     -a ...");
-//			System.out.println("[DEFAULT] sort by dist:    ...");
-//			System.out.println("===========================================");
-//			System.out.println("Pagination options after a completed sort:");
-//			System.out.println("===========================================");
-//			System.out.println("Next page of results:    >  ");
-//			System.out.println("Skip forward 5 pages:    >> ");
-//			System.out.println("Skip to last page:       >>>");
-//			System.out.println("Last page of results:    <  ");
-//			System.out.println("Return back 5 pages:     << ");
-//			System.out.println("Return to first page:    <<<");
-//			System.out.println("[DEFAULT] returns next page of results");
-//			System.out.println("===========================================");		
-//			break;
-//		case "quit":
-//			return;
-//		case "-d":			// Sort by distance
-//			try {
-//				String address = larests.getAddress(Arrays.copyOfRange(args, 1, args.length));
-//				larests.compareDist(larests.requestGoogle(address));
-//				larests.printFormat();
-//			} catch (Exception e) {
-//				System.out.println("Failed to get address coordinates.");
-//				System.out.println("Please reenter postal code address:");
-//				e.printStackTrace();
-//			}
-//			break;
-//		case "-r":			// Sort by number rating
-//			try {
-//				String address = larests.getAddress(Arrays.copyOfRange(args, 1, args.length));
-//				larests.compareDist(larests.requestGoogle(address));
-//				larests.compareRating();
-//				larests.printFormat();
-//			} catch (Exception e) {
-//				System.out.println("Failed to get address coordinates.");
-//				System.out.println("Please reenter postal code address:");
-//				e.printStackTrace();
-//			}
-//			break;
-//		case "-g":			// Sort by letter grade
-//			try {
-//				String address = larests.getAddress(Arrays.copyOfRange(args, 1, args.length));
-//				larests.compareDist(larests.requestGoogle(address));
-//				larests.compareGrade();
-//				larests.printFormat();
-//			} catch (Exception e) {
-//				System.out.println("Failed to get address coordinates.");
-//				System.out.println("Please reenter postal code address:");
-//				e.printStackTrace();
-//			}
-//			break;
-//		case "-a":			// Sort alphabetically
-//			try {
-//				String address = larests.getAddress(Arrays.copyOfRange(args, 1, args.length));
-//				larests.compareDist(larests.requestGoogle(address));
-//				larests.sortABC();
-//				larests.printFormat();
-//			} catch (Exception e) {
-//				System.out.println("Failed to get address coordinates.");
-//				System.out.println("Please reenter postal code address:");
-//				e.printStackTrace();
-//			}
-//			break;
-//		case "<":			// Move back to last page of results
-//			if (larests.isSorted()) {
-//				larests.pageBack(1);
-//			} else {
-//				System.out.println("Please enter a postal code address:");
-//			}
-//			break;
-//		case "<<":			// Jump back 5 pages of results
-//			if (larests.isSorted()) {
-//				larests.pageBack(5);
-//			} else {
-//				System.out.println("Please enter a postal code address:");
-//			}
-//			break;
-//		case "<<<":			// Return to first page of results
-//			if (larests.isSorted()) {
-//				larests.pageBack(-1);
-//			} else {
-//				System.out.println("Please enter a postal code address:");
-//			}
-//			break;
-//		case ">":			// Move to next page of results
-//			if (larests.isSorted()) {
-//				larests.pageNext(1);
-//			} else {
-//				System.out.println("Please enter a postal code address:");
-//			}
-//			break;
-//		case ">>":			// Skip forward 5 pages of results
-//			if (larests.isSorted()) {
-//				larests.pageNext(5);
-//			} else {
-//				System.out.println("Please enter a postal code address:");
-//			}
-//			break;
-//		case ">>>":			// Jump to final page of results
-//			if (larests.isSorted()) {
-//				larests.pageNext(-1);
-//			} else {
-//				System.out.println("Please enter a postal code address:");
-//			}
-//			break;
-//		default:
-//			if (larests.isSorted()) {	// Pagination
-//				larests.pageNext(1);
-//			} else if (args.length == 0) {			
-//				System.out.println("Please enter postal code address;");
-//			} else {					// Sort by distance
-//				try {
-//					String address = larests.getAddress(args);
-//					larests.compareDist(larests.requestGoogle(address));
-//					larests.printFormat();
-//				} catch (Exception e) {
-//					System.out.println("Failed to get address coordinates.");
-//					System.out.println("Please reenter postal code address:");
-//					e.printStackTrace();
-//				}
-//			}
-//			break;
-//		}
+		switch(args[0]) {
+		case "help":
+			System.out.println("Available commands:");
+			System.out.println("===========================================");
+			System.out.println("'...' represents address field");
+			System.out.println("===========================================");
+			System.out.println("Sort by distance: 		-d ...");
+			System.out.println("Sort by health rating:  -r ...");
+			System.out.println("Sort by health grade:   -g ...");
+			System.out.println("Sort by name (ABC):     -a ...");
+			System.out.println("[DEFAULT] sort by dist:    ...");
+			System.out.println("===========================================");
+			System.out.println("Pagination options after a completed sort:");
+			System.out.println("===========================================");
+			System.out.println("Next page of results:    >  ");
+			System.out.println("Skip forward 5 pages:    >> ");
+			System.out.println("Skip to last page:       >>>");
+			System.out.println("Last page of results:    <  ");
+			System.out.println("Return back 5 pages:     << ");
+			System.out.println("Return to first page:    <<<");
+			System.out.println("[DEFAULT] returns next page of results");
+			System.out.println("===========================================");		
+			break;
+		case "quit":
+			return;
+		case "-d":			// Sort by distance
+			try {
+				String address = larests.getAddress(Arrays.copyOfRange(args, 1, args.length));
+				larests.compareDist(larests.requestGoogle(address));
+				larests.printFormat();
+			} catch (Exception e) {
+				System.out.println("Failed to get address coordinates.");
+				System.out.println("Please reenter postal code address:");
+				e.printStackTrace();
+			}
+			break;
+		case "-r":			// Sort by number rating
+			try {
+				String address = larests.getAddress(Arrays.copyOfRange(args, 1, args.length));
+				larests.compareDist(larests.requestGoogle(address));
+				larests.compareRating();
+				larests.printFormat();
+			} catch (Exception e) {
+				System.out.println("Failed to get address coordinates.");
+				System.out.println("Please reenter postal code address:");
+				e.printStackTrace();
+			}
+			break;
+		case "-g":			// Sort by letter grade
+			try {
+				String address = larests.getAddress(Arrays.copyOfRange(args, 1, args.length));
+				larests.compareDist(larests.requestGoogle(address));
+				larests.compareGrade();
+				larests.printFormat();
+			} catch (Exception e) {
+				System.out.println("Failed to get address coordinates.");
+				System.out.println("Please reenter postal code address:");
+				e.printStackTrace();
+			}
+			break;
+		case "-a":			// Sort alphabetically
+			try {
+				String address = larests.getAddress(Arrays.copyOfRange(args, 1, args.length));
+				larests.compareDist(larests.requestGoogle(address));
+				larests.sortABC();
+				larests.printFormat();
+			} catch (Exception e) {
+				System.out.println("Failed to get address coordinates.");
+				System.out.println("Please reenter postal code address:");
+				e.printStackTrace();
+			}
+			break;
+		case "<":			// Move back to last page of results
+			if (larests.isSorted()) {
+				larests.pageBack(1);
+			} else {
+				System.out.println("Please enter a postal code address:");
+			}
+			break;
+		case "<<":			// Jump back 5 pages of results
+			if (larests.isSorted()) {
+				larests.pageBack(5);
+			} else {
+				System.out.println("Please enter a postal code address:");
+			}
+			break;
+		case "<<<":			// Return to first page of results
+			if (larests.isSorted()) {
+				larests.pageBack(-1);
+			} else {
+				System.out.println("Please enter a postal code address:");
+			}
+			break;
+		case ">":			// Move to next page of results
+			if (larests.isSorted()) {
+				larests.pageNext(1);
+			} else {
+				System.out.println("Please enter a postal code address:");
+			}
+			break;
+		case ">>":			// Skip forward 5 pages of results
+			if (larests.isSorted()) {
+				larests.pageNext(5);
+			} else {
+				System.out.println("Please enter a postal code address:");
+			}
+			break;
+		case ">>>":			// Jump to final page of results
+			if (larests.isSorted()) {
+				larests.pageNext(-1);
+			} else {
+				System.out.println("Please enter a postal code address:");
+			}
+			break;
+		default:
+			if (larests.isSorted()) {	// Pagination
+				larests.pageNext(1);
+			} else if (args.length == 0) {			
+				System.out.println("Please enter postal code address;");
+			} else {					// Sort by distance
+				try {
+					String address = larests.getAddress(args);
+					larests.compareDist(larests.requestGoogle(address));
+					larests.printFormat();
+				} catch (Exception e) {
+					System.out.println("Failed to get address coordinates.");
+					System.out.println("Please reenter postal code address:");
+					e.printStackTrace();
+				}
+			}
+			break;
+		}
 		
 	}
 
